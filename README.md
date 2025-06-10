@@ -5,7 +5,7 @@ LDAP information
 - sudo apt update
 - sudo apt install slapd ldap-utils -y
 - sudo dpkg-reconfigure slapd
-      - Omit OpenLDAP server configuration? --> **No**
+      - terminal2 (for zoolab assignment) OpenLDAP server configuration? --> **No**
       - Domain name: **zoo.local**
       - Organization name: **Zoo**
       - Admin password: **zoo123**    (can be anything)    *must remember*
