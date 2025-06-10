@@ -11,7 +11,7 @@ sudo apt install slapd ldap-utils -y
 sudo dpkg-reconfigure slapd
 During configuration:
 
-Omit OpenLDAP configuration? → No
+terminal2 (for ZooLab)  OpenLDAP configuration? → No
 
 DNS domain name → zoo.local
 
