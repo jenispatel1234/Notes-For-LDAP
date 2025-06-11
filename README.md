@@ -125,7 +125,7 @@ bash
 Copy
 Edit
 sudo pam-auth-update
-✔ Check: Create home directory on login
+Check: Create home directory on login
 
 🔹 Step 4: Restart Services
 bash
