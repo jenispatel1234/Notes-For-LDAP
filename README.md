@@ -1,7 +1,7 @@
 # Notes-For-LDAP
 LDAP information 
 🐧 Zoo IT - Domain Login Prototype (LDAP Server + Workstation Setup)
-✅ LDAP Server Setup (core-auth.zoo.local)
+LDAP Server Setup (core-auth.zoo.local)
 🔹 Step 1: Install Required Packages
 bash
 Copy
@@ -78,7 +78,7 @@ bash
 Copy
 Edit
 ldapsearch -x -b "dc=zoo,dc=local"
-🖥️ LDAP Client (Workstation) Setup
+# LDAP Client (Workstation) Setup
 🔹 Step 1: Install Required Packages
 bash
 Copy
@@ -140,8 +140,8 @@ Copy
 Edit
 su - ayusuf
 ldapsearch -x -H ldap://core-auth.zoo.local -b "dc=zoo,dc=local"
-⚙️ Automation Scripts for User Management
-🟢 activate.sh – Add a New LDAP User
+# Automation Scripts for User Management
+# activate.sh – Add a New LDAP User
 bash
 Copy
 Edit
@@ -181,8 +181,8 @@ homeDirectory: /home/$USERNAME
 description: Department: $DEPT | Birthday: $BDAY | Age: $AGE | Pronouns: $PRONOUNS
 EOF
 
-ldapadd -x -D "cn=admin,$BASE_DN" -W -f /tmp/$USERNAME.ldif && echo "✅ User $USERNAME added!"
-🔁 reset.sh – Reset a User’s Password
+ldapadd -x -D "cn=admin,$BASE_DN" -W -f /tmp/$USERNAME.ldif && echo " -  User $USERNAME added!"
+@ reset.sh – Reset a User’s Password
 bash
 Copy
 Edit
@@ -203,8 +203,8 @@ replace: userPassword
 userPassword: $HASH
 EOF
 
-ldapmodify -x -D "cn=admin,$BASE_DN" -W -f /tmp/reset_$USERNAME.ldif && echo "🔁 Password reset for $USERNAME!"
-❌ terminate.sh – Remove a User Permanently
+ldapmodify -x -D "cn=admin,$BASE_DN" -W -f /tmp/reset_$USERNAME.ldif && echo "#  Password reset for $USERNAME!"
+ terminate.sh – Remove a User Permanently
 bash
 Copy
 Edit
@@ -215,8 +215,8 @@ OU="ou=People,$BASE_DN"
 
 read -p "User to terminate: " USERNAME
 
-ldapdelete -x -D "cn=admin,$BASE_DN" -W "uid=$USERNAME,$OU" && echo "❌ User $USERNAME permanently terminated!"
-📝 Tips
+ldapdelete -x -D "cn=admin,$BASE_DN" -W "uid=$USERNAME,$OU" && echo " @ User $USERNAME permanently terminated!"
+## Tips
 Always back up your LDIF files before making changes.
 
 You can view entries using:
