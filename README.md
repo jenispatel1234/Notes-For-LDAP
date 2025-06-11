@@ -1,6 +1,6 @@
 # Notes-For-LDAP
 LDAP information 
-🐧 Zoo IT - Domain Login Prototype (LDAP Server + Workstation Setup)
+&&&& Zoo IT - Domain Login Prototype (LDAP Server + Workstation Setup)
 LDAP Server Setup (core-auth.zoo.local)
 🔹 Step 1: Install Required Packages
 bash
