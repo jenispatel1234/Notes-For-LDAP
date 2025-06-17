@@ -171,7 +171,7 @@ bash
 Copy
 Edit
 su - ayusuf
-If it logs in and creates a folder /home/ayusuf, everything is working 🎉
+If it logs in and creates a folder /home/ayusuf, everything is working
 
 Bonus: Automation Scripts
 activate.sh
