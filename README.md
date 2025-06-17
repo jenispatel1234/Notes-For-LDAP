@@ -1,25 +1,33 @@
-🧠 LDAP Notes (Easy & Short)
-For Zoo IT System – Domain Login Prototype
-🔧 Server: core-auth.zoo.local
-💻 Client: Zoo Staff Workstation
+LDAP Notes – Zoo IT Login System (Easy & Clear)
+This project is about making one central login system for the Zoo staff. One main LDAP Server keeps all the users, and the staff workstation connects to it to login using same ID.
 
-🖥️ LDAP Server Setup (core-auth.zoo.local)
-✅ Step 1: Install LDAP packages
+🖥️ Part 1: LDAP Server Setup (core-auth.zoo.local)
+🔹 Step 1: Install LDAP server packages
+We start by installing OpenLDAP on the server:
+
 bash
 Copy
 Edit
 sudo apt update  
 sudo apt install slapd ldap-utils -y  
 sudo dpkg-reconfigure slapd
-📝 During setup:
+📝 While setting up, give:
 
-Domain: zoo.local
+Domain Name → zoo.local
 
-Org name: Zoo
+Organisation Name → Zoo
 
-Admin password: zoo123
+Password for admin → zoo123
 
-✅ Step 2: Create base folders in LDAP
+Keep database → Yes
+
+Move old DB → Yes
+
+✅ This makes the base LDAP server ready.
+
+🔹 Step 2: Create base directory (People & Groups)
+We now create folders in LDAP for users and groups:
+
 bash
 Copy
 Edit
@@ -36,20 +44,24 @@ ou: People
 dn: ou=Groups,dc=zoo,dc=local
 objectClass: organizationalUnit
 ou: Groups
-Add it to LDAP:
+Then run:
 
 bash
 Copy
 Edit
 ldapadd -x -D "cn=admin,dc=zoo,dc=local" -W -f base.ldif
-✅ Step 3: Add users to LDAP
-Create user file:
+✅ This makes “People” and “Groups” folders inside LDAP.
+
+🔹 Step 3: Add User (e.g., ayusuf)
+We add a real user to LDAP.
+
+First make file:
 
 bash
 Copy
 Edit
 nano users.ldif
-Add user info (change UID, name). Use this:
+Paste:
 
 makefile
 Copy
@@ -63,16 +75,17 @@ sn: Yusuf
 cn: Amina Yusuf
 uidNumber: 10001
 gidNumber: 10001
-userPassword: {SSHA}PASTE_HASH_HERE
+userPassword: {SSHA}PASTE_HERE
 loginShell: /bin/bash
 homeDirectory: /home/ayusuf
-Create password hash:
+Now get password hash:
 
 bash
 Copy
 Edit
 slappasswd
-Paste that hash in the .ldif file
+Enter a password (like 12345) and it will give you encrypted password like {SSHA}...
+Paste that in the file.
 
 Add user:
 
@@ -80,32 +93,40 @@ bash
 Copy
 Edit
 ldapadd -x -D "cn=admin,dc=zoo,dc=local" -W -f users.ldif
-✅ Step 4: Test LDAP entries
+✅ Now your user is added to the server.
+
+🔹 Step 4: Check if user exists
 bash
 Copy
 Edit
 ldapsearch -x -b "dc=zoo,dc=local"
-💻 LDAP Workstation Setup (Zoo Staff)
-✅ Step 1: Install LDAP client packages
+This shows all users in the LDAP server. You should see ayusuf.
+
+💻 Part 2: LDAP Client Setup (Zoo Staff Workstation)
+This machine is used by staff. We make it connect to LDAP server.
+
+🔹 Step 1: Install LDAP client tools
 bash
 Copy
 Edit
 sudo apt update  
 sudo apt install libnss-ldap libpam-ldap ldap-utils nscd -y
-Set:
+During install:
 
 LDAP server: ldap://core-auth.zoo.local
 
 Base DN: dc=zoo,dc=local
 
-✅ Step 2: Connect login to LDAP
-Edit:
+Version: 3
+
+🔹 Step 2: Connect login system to LDAP
+Edit this file:
 
 bash
 Copy
 Edit
 sudo nano /etc/nsswitch.conf
-Update these lines:
+Change these lines:
 
 makefile
 Copy
@@ -113,12 +134,16 @@ Edit
 passwd: files ldap  
 group:  files ldap  
 shadow: files ldap
-✅ Step 3: Create user home on login
+✅ This tells the system to check users from LDAP also.
+
+🔹 Step 3: Make home folder on login
+Edit:
+
 bash
 Copy
 Edit
 sudo nano /etc/pam.d/common-session
-Add at bottom:
+At the bottom, add:
 
 bash
 Copy
@@ -130,21 +155,40 @@ bash
 Copy
 Edit
 sudo pam-auth-update
-✔️ Tick: "Create home directory"
+✔️ Tick "Create home directory on login"
 
-✅ Step 4: Restart service
+🔹 Step 4: Restart name service
 bash
 Copy
 Edit
 sudo systemctl restart nscd
-✅ Step 5: Test user login
+🔹 Step 5: Test login
+Try:
+
 bash
 Copy
 Edit
 su - ayusuf
-⚙️ Automation Scripts (Optional Bonus)
-activate.sh → Creates a new user
+✅ If it logs in and creates a folder /home/ayusuf, everything is working 🎉
 
-reset.sh → Resets a user's password
+🛠️ Bonus: Automation Scripts
+✳️ activate.sh
+This script helps you create a new user fast.
+It asks for full name, username, etc., and then makes .ldif and adds user to LDAP.
 
-terminate.sh → Deletes a user permanently
+✳️ reset.sh
+This script is for resetting password of a user if they forget it.
+You type username and new password, and it updates LDAP.
+
+✳️ terminate.sh
+This script deletes a user forever from LDAP.
+Just type the username, and it removes them.
+
+✅ Summary (in your words)
+I learned how to make a central login system using LDAP
+
+LDAP server stores all user info
+
+Client machines connect and allow login from server
+
+This helps in big networks like Zoo or companies
